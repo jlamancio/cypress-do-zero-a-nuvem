@@ -95,6 +95,14 @@
 
   })
 
-  
+  it('Envia o formulário com sucesso usando um comando customizado ', () => {
+      cy.fillMandatoryFieldsAndSubmit();
+
+      cy.get('.success')
+        .should('be.visible')
+        .and('contain', 'Mensagem enviada com sucesso.');
+       
+
+  })
 
 })
