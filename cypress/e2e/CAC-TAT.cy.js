@@ -95,13 +95,19 @@
 
   })
 
-  it('Envia o formulário com sucesso usando um comando customizado ', () => {
-      cy.fillMandatoryFieldsAndSubmit();
+  it.only('Envia o formulário com sucesso usando um comando customizado ', () => {
+    const data = {
+      firstName: 'Jose Luis',
+      lastName: 'Amancio',
+      email: 'meuemail@email.com',
+      text: 'Muito obrigado'
+    } 
+    
+    cy.fillMandatoryFieldsAndSubmit(data);
 
       cy.get('.success')
         .should('be.visible')
         .and('contain', 'Mensagem enviada com sucesso.');
-       
 
   })
 
