@@ -17,7 +17,7 @@
       cy.get('#lastName').type('Amancio');
       cy.get('#email').type('meuemail@email.com');
       cy.get('#open-text-area').type(longText, { delay: 0 });
-      cy.get('button[type="submit"]').click();
+      cy.contains('button','Enviar').click();
 
       cy.get('.success')
         .should('be.visible')
@@ -30,7 +30,7 @@
       cy.get('#lastName').type('Amancio');
       cy.get('#email').type('meuemail_email.com');
       cy.get('#open-text-area').type('Muito obrigado');
-      cy.get('button[type="submit"]').click();
+      cy.contains('button','Enviar').click();
 
       cy.get('.error')
         .should('be.visible')
@@ -51,7 +51,7 @@
       cy.get('#email').type('meuemail_email.com');
       cy.get('#open-text-area').type('Muito obrigado');
       cy.get('#phone-checkbox').click();
-      cy.get('button[type="submit"]').click();
+      cy.contains('button','Enviar').click();
 
       cy.get('.error')
         .should('be.visible')
@@ -87,7 +87,7 @@
   })
 
   it('Exibe msg de erro ao submeter o formulário sem preencher os campos obrigatórios', () => {
-      cy.get('button[type="submit"]').click();
+      cy.contains('button','Enviar').click();
 
       cy.get('.error')
         .should('be.visible')
@@ -95,20 +95,46 @@
 
   })
 
-  it.only('Envia o formulário com sucesso usando um comando customizado ', () => {
-    const data = {
-      firstName: 'Jose Luis',
-      lastName: 'Amancio',
-      email: 'meuemail@email.com',
-      text: 'Muito obrigado'
-    } 
-    
-    cy.fillMandatoryFieldsAndSubmit(data);
+  it('Envia o formulário com sucesso usando um comando customizado ', () => {
+    cy.fillMandatoryFieldsAndSubmit();
 
       cy.get('.success')
         .should('be.visible')
         .and('contain', 'Mensagem enviada com sucesso.');
 
+  })
+
+  it('seleciona um produto (YouTube) por seu texto', () => {
+     cy.get('#product')
+       .select('YouTube')
+       .should('have.value', 'youtube');
+  })
+
+  it('seleciona um produto (Mentoria) porseu valor', () => {
+    cy.get('#product')
+      .select('mentoria')
+      .should('have.value', 'mentoria');
+  })
+
+  it.only('seleciona um produto (Blog) por seu índice', () => {
+    cy.get('#product')
+      .select(1)
+      .should('have.value', 'blog');
+  })
+
+  it('marca o tipo de atendimento "Feedback"', () => {
+    cy.get('input[type="radio"][value="feedback"]')
+      .check()
+      .should('be.checked');
+  })
+
+  it.only('marca cada tipo de atendimento', () => {
+    cy.get('input[type="radio"]')
+      .each(typeOfService => {
+        cy.wrap(typeofService)
+          .check()
+          .should('be.checked')
+      });
   })
 
 })
