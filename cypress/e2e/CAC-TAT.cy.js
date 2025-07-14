@@ -50,7 +50,7 @@
       cy.get('#lastName').type('Amancio');
       cy.get('#email').type('meuemail_email.com');
       cy.get('#open-text-area').type('Muito obrigado');
-      cy.get('#phone-checkbox').click();
+      cy.get('#phone-checkbox').check();
       cy.contains('button','Enviar').click();
 
       cy.get('.error')
@@ -116,7 +116,7 @@
       .should('have.value', 'mentoria');
   })
 
-  it.only('seleciona um produto (Blog) por seu índice', () => {
+  it('seleciona um produto (Blog) por seu índice', () => {
     cy.get('#product')
       .select(1)
       .should('have.value', 'blog');
@@ -128,13 +128,79 @@
       .should('be.checked');
   })
 
-  it.only('marca cada tipo de atendimento', () => {
+  it('marca cada tipo de atendimento', () => {
     cy.get('input[type="radio"]')
       .each(typeOfService => {
-        cy.wrap(typeofService)
+        cy.wrap(typeOfService)
           .check()
-          .should('be.checked')
+          .should('be.checked');
       });
+  })
+
+  it('marca ambos checkboxes, depois desmarca o segundo', () => {
+    cy.get('input[type="checkbox"]')
+      .check()
+      .should('be.checked')
+      .last()
+      .uncheck()
+      .should('not.be.checked');
+    
+  })
+
+  it('seleciona um arquivo da pasta fixtures', () => {
+    cy.get('#file-upload')
+      .selectFile('cypress/fixtures/messages.json')
+      .should(input =>{
+        expect(input[0].files[0].name).to.equal('messages.json')
+      });
+   
+  })
+
+  it('seleciona um arquivo simulando drag and drop', () => {
+      cy.get('#file-upload')
+      .selectFile('cypress/fixtures/messages.json', { action: 'drag-drop'})
+      .should(input =>{
+        expect(input[0].files[0].name).to.equal('messages.json')
+      });
+  })
+
+  it('seleciona um arquivo utilizando uma fixture para a qual foi dado um alias name', () => {
+     cy.fixture('messages.json').as('sampleFile')
+     cy.get('#file-upload')
+      .selectFile('@sampleFile')
+      .should(input =>{
+        expect(input[0].files[0].name).to.equal('messages.json')
+      });
+  })
+
+  it('verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', () => {
+    cy.contains('a', 'Política de Privacidade')
+      .should('have.attr', 'href', 'privacy.html')
+      .and('have.attr', 'target','_blank');
+  })
+
+  it('acessa a página da política de privacidade removendo o target e então clicando no link', () => {
+     cy.contains('a', 'Política de Privacidade')
+       .invoke('removeAttr', 'target')
+       .click();
+
+     cy.contains('h1', 'Política de Privacidade').should('be.visible');
+
+  })
+
+  
+  it('', () => {
+    
+  })
+
+  
+  it('', () => {
+    
+  })
+
+  
+  it('', () => {
+    
   })
 
 })
